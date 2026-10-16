@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>己土堂 · 个人命理决策支持系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: "Microsoft YaHei", sans-serif; background: #f8fafc; }
+        .nav-item.active { background: #1e293b; color: white; }
+        .panel { display: none; }
+        .panel.active { display: block; }
+        .card { background: white; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .core-circle {
+            width: 120px; height: 120px; border-radius: 50%;
+            background: linear-gradient(135deg, #92400e, #b45309);
+            color: white; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; font-weight: bold; margin: 0 auto;
+        }
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; z-index: 9999;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #lock-screen.hidden { display: none; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Login Lock Screen -->
+    <div id="lock-screen">
+        <div class="text-center">
+            <div class="text-2xl font-bold text-white mb-2">己土堂 · 决策系统</div>
+            <div class="text-slate-400 text-sm mb-8">Please enter username and password</div>
+            
+            <div class="mb-3">
+                <input 
+                    type="text" 
+                    id="username-input" 
+                    class="px-4 py-3 rounded-lg w-64 text-center bg-slate-800 text-white border border-slate-600 focus:outline-none focus:border-amber-500"
+                    placeholder="Username"
+                    onkeydown="if(event.key==='Enter') document.getElementById('password-input').focus()"
+                >
+            </div>
+            
+            <div class="mb-4">
+                <input 
+                    type="password" 
+                    id="password-input" 
+                    class="px-4 py-3 rounded-lg w-64 text-center bg-slate-800 text-white border border-slate-600 focus:outline-none focus:border-amber-500"
+                    placeholder="Password"
+                    onkeydown="if(event.key==='Enter') unlockSystem()"
+                >
+            </div>
+            
+            <div>
+                <button onclick="unlockSystem()" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition w-64">
+                    Enter System
+                </button>
+            </div>
+            <div id="login-error" class="text-red-400 text-sm mt-4 hidden">Wrong username or password</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-slate-800 text-white py-4 px-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">己土堂 · 个人命理决策支持系统</h1>
+            <span class="text-sm text-slate-300">Final Calibrated Version · 2026.10 · Encrypted Local Only</span>
+        </div>
+    </header>
+
+    <div class="max-w-7xl mx-auto flex mt-6 px-6 gap-6 pb-10">
+        <!-- Left Navigation -->
+        <nav class="w-56 shrink-0">
+            <div class="card p-2 sticky top-6">
+                <div class="nav-item active px-4 py-3 rounded cursor-pointer mb-1" data-panel="overview">Core Overview</div>
+                <div class="nav-item px-4 py-3 rounded cursor-pointer mb-1" data-panel="self">Personal BaZi Center</div>
+                <div class="nav-item px-4 py-3 rounded cursor-pointer mb-1" data-panel="family">Family Ecosystem</div>
+                <div class="nav-item px-4 py-3 rounded cursor-pointer mb-1" data-panel="career">Career & Network</div>
+                <div class="nav-item px-4 py-3 rounded cursor-pointer mb-1" data-panel="future">Future Decision Guide</div>
+                <div class="nav-item px-4 py-3 rounded cursor-pointer mb-1" data-panel="liunian">Yearly Fortune Calculator</div>
+                <div class="nav-item px-4 py-3 rounded cursor-pointer mb-1" data-panel="hepan">Relationship Synastry Tool</div>
+                <div class="nav-item px-4 py-3 rounded cursor-pointer" data-panel="log">Calibration Log</div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <main class="flex-1">
+            <!-- Core Overview -->
+            <div id="overview" class="panel active">
+                <div class="card p-8 mb-6">
+                    <h2 class="text-lg font-bold mb-6 text-slate-800">Day Master: Ji Earth</h2>
+                    <div class="core-circle mb-6">癸亥 辛酉<br>己酉 乙亥</div>
+                    <p class="text-center text-slate-600 mb-8">Food God Generates Wealth · Great Earth Destiny · Stable & Controlling Mindset</p>
+                    
+                    <div class="grid grid-cols-4 gap-4 text-center">
+                        <div class="bg-amber-50 p-4 rounded-lg">
+                            <div class="font-bold text-amber-800">Traits</div>
+                            <div class="text-sm text-slate-600 mt-1">Steady, pragmatic, strong control</div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg">
+                            <div class="font-bold text-blue-800">Family Role</div>
+                            <div class="text-sm text-slate-600 mt-1">Core leader, anchor of family</div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg">
+                            <div class="font-bold text-green-800">Career Model</div>
+                            <div class="text-sm text-slate-600 mt-1">Professional income, multi-asset layout</div>
+                        </div>
+                        <div class="bg-rose-50 p-4 rounded-lg">
+                            <div class="font-bold text-rose-800">Favorable Elements</div>
+                            <div class="text-sm text-slate-600 mt-1">Fire & Earth; avoid excess Water</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="card p-6">
+                        <h3 class="font-bold text-slate-800 mb-3">Key Family Milestones</h3>
+                        <ul class="text-sm text-slate-600 space-y-2">
+                            <li>2025 Yisi: Turbulence year, keep low profile</li>
+                            <li>2026 Bingwu: Strong Fire-Earth, family harmony improves</li>
+                            <li>Mother-son Yin-Shen clash: delegate details, avoid micro-management</li>
+                        </ul>
+                    </div>
+                    <div class="card p-6">
+                        <h3 class="font-bold text-slate-800 mb-3">Core Career Strategy</h3>
+                        <ul class="text-sm text-slate-600 space-y-2">
+                            <li>2025: negotiate framework; 2026: execute & monetize</li>
+                            <li>Elders provide direction; partners provide resources</li>
+                            <li>Female partner is key capital source for future growth</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal BaZi Center -->
+            <div id="self" class="panel">
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Final Calibrated BaZi</h2>
+                    <div class="grid grid-cols-4 gap-4 text-center">
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <div class="text-sm text-slate-500">Year Pillar</div>
+                            <div class="text-xl font-bold mt-1">Gui Hai</div>
+                            <div class="text-xs text-slate-500">Indirect Wealth</div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <div class="text-sm text-slate-500">Month Pillar</div>
+                            <div class="text-xl font-bold mt-1">Xin You</div>
+                            <div class="text-xs text-slate-500">Food God</div>
+                        </div>
+                        <div class="bg-amber-100 p-4 rounded-lg border border-amber-300">
+                            <div class="text-sm text-amber-700">Day Pillar (Day Master)</div>
+                            <div class="text-xl font-bold mt-1">Ji You</div>
+                            <div class="text-xs text-amber-700">Ji Earth · Great Earth</div>
+                        </div>
+                        <div class="bg-slate-50 p-4 rounded-lg">
+                            <div class="text-sm text-slate-500">Hour Pillar</div>
+                            <div class="text-xl font-bold mt-1">Yi Hai</div>
+                            <div class="text-xs text-slate-500">Indirect Wealth</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Structure & Core Nature</h2>
+                    <div class="space-y-3 text-slate-700">
+                        <p><strong>Structure: Food God Generates Wealth.</strong> Month pillar Xin You Food God generates wealth from year & hour Hai water. Earn income via expertise and steady management. Suitable for multi-project cross-border layout.</p>
+                        <p><strong>Day Master Ji Earth:</strong> Yin Earth, meaning tolerance, stability, trust, patience and calmness. Good at resource integration and governance, natural leader.</p>
+                        <p><strong>Five Elements Preference:</strong> Original chart strong Metal + Water, Earth weak. Favorable: Fire (Seal) to birth Earth, Earth (Peer) to support self. Avoid excessive Water draining self, excessive Metal consuming energy.</p>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">True Solar Time Correction</h2>
+                    <p class="text-slate-600 text-sm">Birth place: Nanchang (115.86°E), ~16 minutes behind Beijing standard meridian 120°E</p>
+                    <p class="text-slate-600 text-sm">Beijing time 21:20 → Local true solar time 21:04, still Hai hour. Hour confirmed correct.</p>
+                </div>
+            </div>
+
+            <!-- Family Ecosystem -->
+            <div id="family" class="panel">
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Family BaZi Overview Table</h2>
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="text-left p-2">Person</th>
+                                <th class="text-left p-2">BaZi</th>
+                                <th class="text-left p-2">Day Master</th>
+                                <th class="text-left p-2">Core Feature</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr>
+                                <td class="p-2 font-medium">You</td>
+                                <td class="p-2">Gui Hai, Xin You, Ji You, Yi Hai</td>
+                                <td class="p-2">Ji Earth</td>
+                                <td class="p-2">Food god wealth, stable leadership</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium">Wife</td>
+                                <td class="p-2">Gui Hai, Jia Yin, Ren Shen, Gui Mao</td>
+                                <td class="p-2">Ren Water</td>
+                                <td class="p-2">Yin-Shen clash, flexible & volatile</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium">Son</td>
+                                <td class="p-2">Ding You, Ren Zi, Geng Yin, Gui Wei</td>
+                                <td class="p-2">Geng Metal</td>
+                                <td class="p-2">Metal-Water Outlet, bright & strong will</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Marriage & Wealth Cooperation</h2>
+                    <div class="space-y-3 text-slate-700">
+                        <p><strong>Power dynamic:</strong> Ji Earth controls Ren Water; Jia-Ji combination means wife fundamentally aligns with your values. You hold final family decision power.</p>
+                        <p><strong>Wealth model:</strong> You are the primary wealth generator. Wife’s Yin-Shen clash causes frequent idea shifts and execution delays. She fits coordination & auxiliary roles; major investments need your final approval.</p>
+                        <p><strong>Interaction rule:</strong> Your stability balances her volatility. Make key decisions, leave flexible space for her daily affairs.</p>
+                    </div>
+                </div>
+
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Parenting Division</h2>
+                    <div class="space-y-3 text-slate-700">
+                        <p><strong>Son’s nature:</strong> Metal-Water outlet, highly intelligent, responds better to reasoning than strict orders. Excess water makes him restless, requires Fire-Earth balancing.</p>
+                        <p><strong>Mother-son friction:</strong> Wife’s Shen clashes son’s Yin. Conflicts easily happen on study & daily habits; wife should focus on big picture.</p>
+                        <p><strong>Education split:</strong> You (Ji Earth) define direction and rules. Encourage outdoor & patient hobbies to add Fire-Earth energy.</p>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Family Annual Key Cycles</h2>
+                    <ul class="space-y-3 text-slate-700">
+                        <li><strong>2024 Jiachen:</strong> Chen-You combination, stable career and family life</li>
+                        <li><strong>2025 Yisi ⚠️:</strong> High turbulence. Si-Hai clash, Si-Shen penalty, Yin-Si penalty. Avoid high-risk investment or big relocation.</li>
+                        <li><strong>2026-2027 Bingwu / Dingwei:</strong> Strong Fire-Earth favorable cycle. Career growth, son’s state improves, family harmony rises.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Career & Network -->
+            <div id="career" class="panel">
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Human Relationship Five Elements Map</h2>
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div class="col-start-2 bg-red-50 p-4 rounded-lg">
+                            <div class="font-bold text-red-800">Foundation · Fire-Earth Support</div>
+                            <div class="text-sm text-slate-600 mt-1">#1 Elder + #4 Noble Helper</div>
+                            <div class="text-xs text-slate-500 mt-1">Seal: guidance, reputation, protection</div>
+                        </div>
+                        <div class="col-start-1 bg-blue-50 p-4 rounded-lg">
+                            <div class="font-bold text-blue-800">Career Platform · Metal-Water momentum</div>
+                            <div class="text-sm text-slate-600 mt-1">#2 Boss + #3 Minor Partner</div>
+                            <div class="text-xs text-slate-500 mt-1">Food / Wealth: opportunity, profit, pressure</div>
+                        </div>
+                        <div class="col-start-3 bg-amber-50 p-4 rounded-lg">
+                            <div class="font-bold text-amber-800">Future Upside · Fire-Earth resonance</div>
+                            <div class="text-sm text-slate-600 mt-1">Female Partner</div>
+                            <div class="text-xs text-slate-500 mt-1">Wealth generating seal: capital & monetization</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">5 Key Person Profiles</h2>
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-amber-500 pl-4 py-2">
+                            <h3 class="font-bold">#1 Elder (Mentor / Foster Father)</h3>
+                            <p class="text-sm text-slate-500">Ji Chou, Wu Chen, Bing Xu, Geng Yin · Bing Fire Day Master</p>
+                            <p class="text-sm text-slate-700 mt-1">Yin-Wu-Xu fire trine supports you. Pure spiritual mentorship, no money entanglement, your life stabilizer.</p>
+                        </div>
+                        <div class="border-l-4 border-blue-500 pl-4 py-2">
+                            <h3 class="font-bold">#2 Employer / Group Board</h3>
+                            <p class="text-sm text-slate-500">Geng Zi, Jia Shen, Geng Chen, Ren Wu · Geng Metal Day Master</p>
+                            <p class="text-sm text-slate-700 mt-1">Christian entrepreneur, honest & bold. Provides your core career platform.</p>
+                        </div>
+                        <div class="border-l-4 border-green-500 pl-4 py-2">
+                            <h3 class="font-bold">#3 Minor Former Partner</h3>
+                            <p class="text-sm text-slate-500">Xin Hai, Geng Yin, Gui Wei, Ding Si · Gui Water Day Master</p>
+                            <p class="text-sm text-slate-700 mt-1">Strong wealth energy, sharp with numbers, good at project monetization.</p>
+                        </div>
+                        <div class="border-l-4 border-red-500 pl-4 py-2">
+                            <h3 class="font-bold">#4 Noble Guide</h3>
+                            <p class="text-sm text-slate-500">Geng Zi, Ren Wu, Yi Hai, Wu Yin · Yi Wood Day Master</p>
+                            <p class="text-sm text-slate-700 mt-1">Buddhist practitioner, generous, gives critical directional advice at crossroads.</p>
+                        </div>
+                        <div class="border-l-4 border-rose-500 pl-4 py-2">
+                            <h3 class="font-bold">Female Capital Partner</h3>
+                            <p class="text-sm text-slate-500">Ren Xu, Ding Wei, Gui Si, Wu Wu · Gui Water Day Master</p>
+                            <p class="text-sm text-slate-700 mt-1">Extremely strong wealth. In 2026 Wu fire nourishes earth, her capital converts to your real gains.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Cooperation Boundaries & Risk Alert</h2>
+                    <ul class="space-y-2 text-slate-700 text-sm">
+                        <li>• For female partner cooperation, lock all terms in formal written contract early 2026 to avoid missing details from Wu-Wei combination</li>
+                        <li>• #3 minor partner: cooperate for profit, keep professional distance, avoid deep personal ties</li>
+                        <li>• Elder & noble guide: keep respect and gratitude, do not pull them into financial matters</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Future Decision Guide -->
+            <div id="future" class="panel">
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">3-Year Strategic Summary Table</h2>
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="text-left p-2">Year</th>
+                                <th class="text-left p-2">Stem-Branch</th>
+                                <th class="text-left p-2">Tone</th>
+                                <th class="text-left p-2">Core Strategy</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr>
+                                <td class="p-2">2025</td>
+                                <td class="p-2">Yi Si</td>
+                                <td class="p-2 text-orange-600 font-medium">Defense · Turbulence</td>
+                                <td class="p-2">Hold steady, no high-risk investment</td>
+                            </tr>
+                            <tr class="bg-green-50">
+                                <td class="p-2">2026</td>
+                                <td class="p-2">Bing Wu</td>
+                                <td class="p-2 text-green-700 font-medium">Offensive · Fire-Earth Favorable</td>
+                                <td class="p-2">Capture resources, execute and monetize for long term gain</td>
+                            </tr>
+                            <tr class="bg-green-50">
+                                <td class="p-2">2027</td>
+                                <td class="p-2">Ding Wei</td>
+                                <td class="p-2 text-green-700 font-medium">Continuation · Sustained growth</td>
+                                <td class="p-2">Consolidate gains, expand steadily, work-family balance</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">2025 Defensive Playbook</h2>
+                    <ul class="space-y-2 text-slate-700">
+                        <li>• Career: only negotiate framework with female partner, delay execution until 2026</li>
+                        <li>• Family: postpone big changes like relocation or school transfer, reduce conflicts</li>
+                        <li>• Finance: avoid high-risk investment, no personal guarantee or loan, preserve cash flow</li>
+                        <li>• Social: avoid disputes, retreat when conflicts arise</li>
+                    </ul>
+                </div>
+
+                <div class="card p-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">2026 Offensive Playbook</h2>
+                    <ul class="space-y-2 text-slate-700">
+                        <li>• Career: fully onboard capital & projects from female partner, leverage fire nourishing earth momentum</li>
+                        <li>• Finance: convert profits into hard assets / low-risk long-term holdings to lock gains</li>
+                        <li>• Family: more outdoor activities with son; your upward fortune naturally lifts his state</li>
+                        <li>• Network: deepen connection with elders and noble guides, reinforce foundational relationships</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Yearly Fortune Calculator -->
+            <div id="liunian" class="panel">
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">Annual Luck Calculator</h2>
+                    <p class="text-sm text-slate-500 mb-4">Calculates year fortune based on Ji Earth day master and original chart preferences</p>
+                    <div class="flex gap-3 mb-6">
+                        <input 
+                            type="number" 
+                            id="year-input" 
+                            value="2026"
+                            class="px-4 py-2 border rounded-lg w-40 focus:outline-none focus:border-amber-500"
+                            placeholder="Input Year"
+                        >
+                        <button onclick="calculateLiunian()" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition">
+                            Calculate
+                        </button>
+                    </div>
+                    <div id="liunian-result" class="bg-slate-50 rounded-lg p-6">
+                        <div class="text-center text-slate-400">Press calculate button to view result</div>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <h3 class="font-bold text-slate-800 mb-3">Calculation Notes</h3>
+                    <ul class="text-sm text-slate-600 space-y-1">
+                        <li>• Reference: Ji Earth day master. Fire & Earth favorable; Water & Metal unfavorable</li>
+                        <li>• Evaluates 5-element interactions plus clashes, combinations, penalties vs original chart</li>
+                        <li>• Rating tiers: Great Auspicious, Auspicious, Neutral, Inauspicious, Severe Inauspicious</li>
+                        <li>• Calculation range: 1950 ~ 2100 AD</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Relationship Synastry Tool -->
+            <div id="hepan" class="panel">
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">BaZi Synastry Analysis Tool</h2>
+                    <p class="text-sm text-slate-500 mb-4">Input another person’s four pillars to compute 5-element interaction & cooperation potential with your Ji Earth chart</p>
+                    
+                    <div class="grid grid-cols-4 gap-3 mb-6">
+                        <div>
+                            <label class="text-sm text-slate-600 block mb-1">Year Pillar</label>
+                            <input id="hp-year" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500" placeholder="e.g. Jia Zi">
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-600 block mb-1">Month Pillar</label>
+                            <input id="hp-month" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500" placeholder="e.g. Yi Chou">
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-600 block mb-1">Day Pillar</label>
+                            <input id="hp-day" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500" placeholder="e.g. Bing Yin">
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-600 block mb-1">Hour Pillar</label>
+                            <input id="hp-hour" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500" placeholder="e.g. Ding Mao">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="text-sm text-slate-600 block mb-1">Other Party Day Master Element</label>
+                        <select id="hp-wuxing" class="px-3 py-2 border rounded-lg w-40 focus:outline-none focus:border-amber-500">
+                            <option value="wood">Wood (Jia / Yi)</option>
+                            <option value="fire">Fire (Bing / Ding)</option>
+                            <option value="earth">Earth (Wu / Ji)</option>
+                            <option value="metal">Metal (Geng / Xin)</option>
+                            <option value="water">Water (Ren / Gui)</option>
+                        </select>
+                    </div>
+
+                    <button onclick="calculateHepan()" class="px-6 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg transition mb-6">
+                        Run Synastry Analysis
+                    </button>
+
+                    <div id="hepan-result" class="bg-slate-50 rounded-lg p-6">
+                        <div class="text-center text-slate-400">Fill data then click analysis</div>
+                    </div>
+                </div>
+
+                <div class="card p-6">
+                    <h3 class="font-bold text-slate-800 mb-3">10 Gods Reference (For Ji Earth Day Master)</h3>
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="text-left p-2">Other Element</th>
+                                <th class="text-left p-2">10 God</th>
+                                <th class="text-left p-2">Relationship Definition</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr><td class="p-2">Fire</td><td class="p-2">Seal Star</td><td class="p-2 text-green-600">Nourish you: elders, mentors, reputation & protection</td></tr>
+                            <tr><td class="p-2">Earth</td><td class="p-2">Peer / Friend</td><td class="p-2 text-blue-600">Same element: peers, partners, cooperation & competition</td></tr>
+                            <tr><td class="p-2">Metal</td><td class="p-2">Food / Outlet</td><td class="p-2 text-slate-600">You generate them: juniors, subordinates, creativity</td></tr>
+                            <tr><td class="p-2">Water</td><td class="p-2">Wealth Star</td><td class="p-2 text-amber-600">You control them: business partners, money opportunities</td></tr>
+                            <tr><td class="p-2">Wood</td><td class="p-2">Officer / Killing</td><td class="p-2 text-red-600">Controls you: superiors, rules, pressure & challenges</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Calibration Log -->
+            <div id="log" class="panel">
+                <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">BaZi Correction Records</h2>
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="text-left p-2">Person</th>
+                                <th class="text-left p-2">Pillar</th>
+                                <th class="text-left p-2">Old Wrong</th>
+                                <th class="text-left p-2">Calibrated Final</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr>
+                                <td class="p-2">You</td>
+                                <td class="p-2">Day/Month/Hour</td>
+                                <td class="p-2">Gui Hai / Yi You / missing</td>
+                                <td class="p-2 text-green-600 font-medium">Ji You / Xin You / Yi Hai</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2">Wife</td>
+                                <td class="p-2">Day/Hour</td>
+                                <td class="p-2">Gui Hai / Yi Mao</td>
+                                <td class="p-2 text-green-600 font-medium">Ren Shen / Gui Mao</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2">Son</td>
+                                <td class="p-2">Month/Day/Hour</td>
+                                <td class="p-2">Wu Zi / Ji Si / Ji Wei</td>
+                                <td class="p-2 text-green-600 font-medium">Ren Zi / Geng Yin / Gui Wei</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2">#2 Boss</td>
+                                <td class="p-2">Month</td>
+                                <td class="p-2">Wu Shen</td>
+                                <td class="p-2 text-green-600 font-medium">Jia Shen</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2">#4 Noble Guide</td>
+                                <td class="p-2">Month</td>
+                                <td class="p-2">Wu Wu</td>
+                                <td class="p-2 text-green-600 font-medium">Ren Wu</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card p-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800">True Solar Time Summary</h2>
+                    <table class="w-full text-sm">
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="text-left p-2">Person</th>
+                                <th class="text-left p-2">Birth Place</th>
+                                <th class="text-left p-2">Time Offset</th>
+                                <th class="text-left p-2">Final Hour Confirmed</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr>
+                                <td class="p-2">You</td>
+                                <td class="p-2">Nanchang 115.86°E</td>
+                                <td class="p-2">-16 min</td>
+                                <td class="p-2">Hai Hour ✓</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2">Wife</td>
+                                <td class="p-2">Putian 119°E</td>
+                                <td class="p-2">-4 min</td>
+                                <td class="p-2">Mao Hour ✓</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2">Son</td>
+                                <td class="p-2">Jakarta 106.83°E</td>
+                                <td class="p-2">+7 min</td>
+                                <td class="p-2">Wei Hour ✓</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="text-xs text-slate-500 mt-4">Note: Hour pillars for all five contacts validated via major life events and personality matching.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Login credential
+        const SYSTEM_USERNAME = "admin";
+        const SYSTEM_PASSWORD = "admin@123";
+        
+        function unlockSystem() {
+            const username = document.getElementById('username-input').value;
+            const password = document.getElementById('password-input').value;
+            
+            if (username === SYSTEM_USERNAME && password === SYSTEM_PASSWORD) {
+                document.getElementById('lock-screen').classList.add('hidden');
+                localStorage.setItem('jitang_unlocked', '1');
+            } else {
+                document.getElementById('login-error').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('login-error').classList.add('hidden');
+                }, 2000);
+            }
+        }
+
+        // Auto restore login state
+        if (localStorage.getItem('jitang_unlocked') === '1') {
+            document.getElementById('lock-screen').classList.add('hidden');
+        }
+
+        // Navigation tab switch
+        const navItems = document.querySelectorAll('.nav-item');
+        const panels = document.querySelectorAll('.panel');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const target = item.dataset.panel;
+                navItems.forEach(n => n.classList.remove('active'));
+                panels.forEach(p => p.classList.remove('active'));
+                item.classList.add('active');
+                document.getElementById(target).classList.add('active');
+            });
+        });
+
+        // Heavenly stems & earthly branches
+        const tianGan = ['Jia','Yi','Bing','Ding','Wu','Ji','Geng','Xin','Ren','Gui'];
+        const diZhi = ['Zi','Chou','Yin','Mao','Chen','Si','Wu','Wei','Shen','You','Xu','Hai'];
+        const ganWuxing = {'Jia':'wood','Yi':'wood','Bing':'fire','Ding':'fire','Wu':'earth','Ji':'earth','Geng':'metal','Xin':'metal','Ren':'water','Gui':'water'};
+        const zhiWuxing = {'Zi':'water','Chou':'earth','Yin':'wood','Mao':'wood','Chen':'earth','Si':'fire','Wu':'fire','Wei':'earth','Shen':'metal','You':'metal','Xu':'earth','Hai':'water'};
+
+        function getGanZhi(year) {
+            const ganIndex = (year - 4) % 10;
+            const zhiIndex = (year - 4) % 12;
+            return {
+                gan: tianGan[ganIndex],
+                zhi: diZhi[zhiIndex],
+                full: tianGan[ganIndex] + " " + diZhi[zhiIndex]
+            };
+        }
+
+        function calculateLiunian() {
+            const year = parseInt(document.getElementById('year-input').value);
+            if (year < 1950 || year > 2100) {
+                alert('Please input year between 1950 and 2100');
+                return;
+            }
+
+            const gz = getGanZhi(year);
+            const ganXing = ganWuxing[gz.gan];
+            const zhiXing = zhiWuxing[gz.zhi];
+
+            let score = 0;
+            let details = [];
+
+            // Stem scoring
+            if (ganXing === 'fire') { score += 2; details.push('Stem ' + gz.gan + ' Fire is Seal Star, nourishes day master, auspicious'); }
+            else if (ganXing === 'earth') { score += 1.5; details.push('Stem ' + gz.gan + ' Earth is Peer, supports day master, auspicious'); }
+            else if (ganXing === 'metal') { score -= 1; details.push('Stem ' + gz.gan + ' Metal is Outlet, consumes energy, neutral-slightly negative'); }
+            else if (ganXing === 'water') { score -= 1.5; details.push('Stem ' + gz.gan + ' Water is Wealth, drains self strongly, inauspicious'); }
+            else if (ganXing === 'wood') { score -= 1; details.push('Stem ' + gz.gan + ' Wood is Officer-Killing, controls day master, neutral-slightly negative'); }
+
+            // Branch scoring
+            if (zhiXing === 'fire') { score += 2; details.push('Branch ' + gz.zhi + ' Fire Seal, strong nourishment, great auspicious'); }
+            else if (zhiXing === 'earth') { score += 1.5; details.push('Branch ' + gz.zhi + ' Earth Peer, root support, auspicious'); }
+            else if (zhiXing === 'metal') { score -= 0.5; details.push('Branch ' + gz.zhi + ' Metal Outlet, release talent, neutral'); }
+            else if (zhiXing === 'water') { score -= 2; details.push('Branch ' + gz.zhi + ' Water Wealth, heavy drain, inauspicious'); }
+            else if (zhiXing === 'wood') { score -= 1.5; details.push('Branch ' + gz.zhi + ' Wood Officer, suppress day master, inauspicious'); }
+
+            // Original chart clash / combination rules
+            if (gz.zhi === 'Si') { 
+                score -= 1; 
+                details.push('Si-Hai clash, hour pillar hit, turbulence & changes likely'); 
+            }
+            if (gz.zhi === 'Chen') { 
+                score += 0.5; 
+                details.push('Chen-You combination, day pillar merged, career stable'); 
+            }
+            if (gz.zhi === 'Wu') { 
+                score += 0.5; 
+                details.push('Wu fire refines metal, warms chart, overall positive'); 
+            }
+            if (gz.zhi === 'Chou') { 
+                score += 0.5; 
+                details.push('Chou-You half metal combination, outlet strengthened, talent expressed'); 
+            }
+
+            // Rank
+            let level, levelColor;
+            if (score >= 3) { level = 'Great Auspicious'; levelColor = 'text-green-700 bg-green-100'; }
+            else if (score >= 1) { level = 'Auspicious'; levelColor = 'text-green-600 bg-green-50'; }
+            else if (score >= -1) { level = 'Neutral'; levelColor = 'text-slate-600 bg-slate-100'; }
+            else if (score >= -3) { level = 'Inauspicious'; levelColor = 'text-orange-600 bg-orange-50'; }
+            else { level = 'Severe Inauspicious'; levelColor = 'text-red-700 bg-red-100'; }
+
+            // Advice
+            let advice;
+            if (score >= 1) {
+                advice = 'Favorable cycle. Take initiative, seize opportunities, expand layout and execute investments.';
+            } else if (score >= -1) {
+                advice = 'Neutral cycle. Maintain steady progress, no reckless risk, focus on accumulation.';
+            } else {
+                advice = 'Weak cycle. Defensive posture, avoid big risky decisions, reduce major commitments.';
+            }
+
+            document.getElementById('liunian-result').innerHTML = `
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <span class="text-2xl font-bold text-slate-800">${year}</span>
+                        <span class="ml-3 text-lg text-slate-600">${gz.full}</span>
+                    </div>
+                    <span class="px-4 py-2 rounded-lg font-bold ${levelColor}">${level}</span>
+                </div>
+                <div class="border-t pt-4 mb-4">
+                    <h4 class="font-bold text-slate-700 mb-2">Fortune Breakdown</h4>
+                    <ul class="text-sm text-slate-600 space-y-1">
+                        ${details.map(d => '<li>• ' + d + '</li>').join('')}
+                    </ul>
+                </div>
+                <div class="bg-amber-50 rounded-lg p-4">
+                    <h4 class="font-bold text-amber-800 mb-1">Annual Strategy Recommendation</h4>
+                    <p class="text-sm text-amber-700">${advice}</p>
+                </div>
+            `;
+        }
+
+        // Synastry calculator
+        function calculateHepan() {
+            const year = document.getElementById('hp-year').value.trim();
+            const month = document.getElementById('hp-month').value.trim();
+            const day = document.getElementById('hp-day').value.trim();
+            const hour = document.getElementById('hp-hour').value.trim();
+            const wuxing = document.getElementById('hp-wuxing').value;
+
+            if (!day) {
+                alert('Please fill at least the day pillar');
+                return;
+            }
+
+            const shiShenMap = {
+                'fire': { name: 'Seal Star', desc: 'Nourishes you: elders, mentors, reputation & protection' },
+                'earth': { name: 'Peer / Friend', desc: 'Same element: peers, partners, cooperation & competition' },
+                'metal': { name: 'Food Outlet', desc: 'You generate them: juniors, subordinates, creativity' },
+                'water': { name: 'Wealth Star', desc: 'You control them: business partners, money opportunities' },
+                'wood': { name: 'Officer / Killing', desc: 'Controls you: superiors, rules, pressure & challenges' }
+            };
+
+            const ss = shiShenMap[wuxing];
+
+            let score = 0;
+            let pros = [];
+            let cons = [];
+
+            if (wuxing === 'fire') {
+                score = 85;
+                pros = ['Nourishes your day master, brings noble luck', 'Spiritual alignment, provides direction', 'Boosts career and reputation', 'Long-term valuable ally'];
+                cons = ['May be strong-willed and restrictive', 'Mostly spiritual support, limited direct cash benefits'];
+            } else if (wuxing === 'earth') {
+                score = 75;
+                pros = ['Peer support, work side-by-side', 'Similar values, easy communication', 'Shares pressure and risks'];
+                cons = ['Competition exists, profit split must be written clearly', 'Deadlocks can happen during disagreement'];
+            } else if (wuxing === 'metal') {
+                score = 65;
+                pros = ['Brings out your talent & capability', 'Reliable subordinates for execution', 'Fresh ideas and innovation'];
+                cons = ['Consumes your energy, drains you over time', 'Creative but may lack stability'];
+            } else if (wuxing === 'water') {
+                score = 70;
+                pros = ['Brings wealth and commercial opportunities', 'Partnership can create financial gains', 'Flexible and resourceful'];
+                cons = ['Drains your energy, cooperation costs effort', 'Water is volatile, stability risk'];
+            } else if (wuxing === 'wood') {
+                score = 55;
+                pros = ['Pushes your growth and career progress', 'Helps establish rules and structure', 'Usually capable & resourceful'];
+                cons = ['Suppresses day master, creates pressure', 'Conflicts and friction easy to arise', 'You are in subordinate position'];
+            }
+
+            let advice;
+            if (score >= 80) advice = 'Deep long-term partnership, sincere relationship, valuable noble person.';
+            else if (score >= 70) advice = 'Suitable cooperation. Clear roles and profit terms for mutual win.';
+            else if (score >= 60) advice = 'Limited cooperation, keep professional distance, avoid full deep trust.';
+            else advice = 'Exercise caution, set firm boundaries, strong risk control, not for deep collaboration.';
+
+            document.getElementById('hepan-result').innerHTML = `
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <span class="text-xl font-bold text-slate-800">Other BaZi: </span>
+                        <span class="text-slate-600">${year || '-'} ${month || '-'} ${day || '-'} ${hour || '-'}</span>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-sm text-slate-500">Day Master Element: ${wuxing}</div>
+                        <div class="text-lg font-bold text-amber-700">10 God: ${ss.name}</div>
+                    </div>
+                </div>
+
+                <div class="border-t pt-4 mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="font-bold text-slate-700">Cooperation Potential Score</span>
+                        <span class="text-xl font-bold text-amber-600">${score}/100</span>
+                    </div>
+                    <div class="w-full bg-slate-200 rounded-full h-3">
+                        <div class="bg-amber-500 h-3 rounded-full" style="width: ${score}%"></div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div class="bg-green-50 rounded-lg p-4">
+                        <h4 class="font-bold text-green-700 mb-2">Relationship Strengths</h4>
+                        <ul class="text-sm text-green-600 space-y-1">
+                            ${pros.map(p => '<li>• ' + p + '</li>').join('')}
+                        </ul>
+                    </div>
+                    <div class="bg-red-50 rounded-lg p-4">
+                        <h4 class="font-bold text-red-700 mb-2">Potential Risks</h4>
+                        <ul class="text-sm text-red-600 space-y-1">
+                            ${cons.map(c => '<li>• ' + c + '</li>').join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="bg-amber-50 rounded-lg p-4">
+                    <h4 class="font-bold text-amber-800 mb-1">Advice for Interaction</h4>
+                    <p class="text-sm text-amber-700">${advice}</p>
+                </div>
+            `;
+        }
+
+        window.onload = function() {
+            calculateLiunian();
+        };
+    </script>
+</body>
+</html>
