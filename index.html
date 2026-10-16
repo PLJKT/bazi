@@ -229,6 +229,7 @@
                                 <td class="p-2" data-i18n="peo_p5_feat">财星极旺；2026 午火生土，条款窗口期</td>
                             </tr>
                         </tbody>
+                        <tbody id="peopleBody" class="divide-y"></tbody>
                     </table>
                     </div>
                 </div>
@@ -711,6 +712,56 @@
             <!-- Relationship Synastry Tool -->
             <div id="hepan" class="panel">
                 <div class="card p-6 mb-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800" data-i18n="hp_new_title">新增人物档案 · 自动推算</h2>
+                    <p class="text-sm text-slate-500 mb-4" data-i18n="hp_new_desc">输入出生日期（公历或农历）与时辰，自动推算四柱；可填入下方合盘分析，或一键加入人物总览</p>
+                    <div class="grid grid-cols-2 gap-3 mb-3">
+                        <div>
+                            <label class="text-sm text-slate-600 block mb-1" data-i18n="hp_new_name">姓名 / 称呼</label>
+                            <input id="hp-new-name" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500" data-i18n-ph="hp_new_name_ph" placeholder="如：张三 / 堂兄">
+                        </div>
+                        <div>
+                            <label class="text-sm text-slate-600 block mb-1" data-i18n="hp_new_rel">关系 / 备注</label>
+                            <input id="hp-new-rel" type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500" data-i18n-ph="hp_new_rel_ph" placeholder="如：同学 / 项目伙伴">
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 mb-4 flex-wrap">
+                        <span class="text-sm text-slate-600" data-i18n="hp_new_cal">历法</span>
+                        <select id="hp-new-cal" onchange="toggleNewCal()" class="px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500">
+                            <option value="solar" data-i18n="hp_new_solar">公历</option>
+                            <option value="lunar" data-i18n="hp_new_lunar">农历</option>
+                        </select>
+                        <input id="hp-new-year" type="number" class="w-24 px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500" data-i18n-ph="hp_new_year" placeholder="年">
+                        <input id="hp-new-month" type="number" class="w-20 px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500" data-i18n-ph="hp_new_month" placeholder="月">
+                        <input id="hp-new-day" type="number" class="w-20 px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500" data-i18n-ph="hp_new_day" placeholder="日">
+                        <label id="hp-new-leap-wrap" class="hidden items-center gap-1 text-sm text-slate-600">
+                            <input id="hp-new-leap" type="checkbox" class="accent-amber-600">
+                            <span data-i18n="hp_new_leap">闰月</span>
+                        </label>
+                        <span class="text-sm text-slate-600 ml-2" data-i18n="hp_new_hour">时辰</span>
+                        <select id="hp-new-hour" class="px-3 py-2 border rounded-lg focus:outline-none focus:border-amber-500">
+                            <option value="0" data-i18n="hp_hour_0">子时（23:00-00:59）</option>
+                            <option value="1" data-i18n="hp_hour_1">丑时（01:00-02:59）</option>
+                            <option value="2" data-i18n="hp_hour_2">寅时（03:00-04:59）</option>
+                            <option value="3" data-i18n="hp_hour_3">卯时（05:00-06:59）</option>
+                            <option value="4" data-i18n="hp_hour_4">辰时（07:00-08:59）</option>
+                            <option value="5" data-i18n="hp_hour_5">巳时（09:00-10:59）</option>
+                            <option value="6" data-i18n="hp_hour_6">午时（11:00-12:59）</option>
+                            <option value="7" data-i18n="hp_hour_7">未时（13:00-14:59）</option>
+                            <option value="8" data-i18n="hp_hour_8">申时（15:00-16:59）</option>
+                            <option value="9" data-i18n="hp_hour_9">酉时（17:00-18:59）</option>
+                            <option value="10" data-i18n="hp_hour_10">戌时（19:00-20:59）</option>
+                            <option value="11" data-i18n="hp_hour_11">亥时（21:00-22:59）</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-3 flex-wrap mb-4">
+                        <button onclick="calcNewPerson()" class="px-5 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg transition" data-i18n="hp_new_calc">推算四柱</button>
+                        <button onclick="fillHepanFromNew()" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition" data-i18n="hp_new_fill">填入合盘分析</button>
+                        <button onclick="addPersonToOverview()" class="px-5 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition" data-i18n="hp_new_add">添加到人物总览</button>
+                    </div>
+                    <div id="hp-new-result" class="hidden bg-slate-50 rounded-lg p-4 text-sm text-slate-700"></div>
+                </div>
+
+                <div class="card p-6 mb-6">
                     <h2 class="text-lg font-bold mb-4 text-slate-800" data-i18n="hp_title">八字合盘分析工具</h2>
                     <p class="text-sm text-slate-500 mb-4" data-i18n="hp_desc">输入对方四柱，计算其与你的己土命局的五行作用与合作潜力</p>
                     
@@ -1058,6 +1109,28 @@
         hp_hour_l: "时柱", hp_hour_ph: "如：丁卯",
         hp_wx_l: "对方日主五行",
         hp_wx_wood: "木（甲 / 乙）", hp_wx_fire: "火（丙 / 丁）", hp_wx_earth: "土（戊 / 己）", hp_wx_metal: "金（庚 / 辛）", hp_wx_water: "水（壬 / 癸）",
+        hp_new_title: "新增人物档案 · 自动推算",
+        hp_new_desc: "输入出生日期（公历或农历）与时辰，自动推算四柱；可填入下方合盘分析，或一键加入人物总览",
+        hp_new_name: "姓名 / 称呼",
+        hp_new_name_ph: "如：张三 / 堂兄",
+        hp_new_rel: "关系 / 备注",
+        hp_new_rel_ph: "如：同学 / 项目伙伴",
+        hp_new_cal: "历法",
+        hp_new_solar: "公历",
+        hp_new_lunar: "农历",
+        hp_new_leap: "闰月",
+        hp_new_hour: "时辰",
+        hp_new_year: "年", hp_new_month: "月", hp_new_day: "日",
+        hp_new_calc: "推算四柱",
+        hp_new_fill: "填入合盘分析",
+        hp_new_add: "添加到人物总览",
+        hp_new_solar_date: "公历：", hp_new_lunar_date: "农历：", hp_new_four: "四柱：", hp_new_dm: "日主：",
+        hp_alert_name: "请先填写姓名 / 称呼",
+        hp_alert_date: "出生日期无效，请检查（支持 1900-2100 年）",
+        hp_new_added: "已添加到人物总览",
+        hp_hour_0: "子时（23:00-00:59）", hp_hour_1: "丑时（01:00-02:59）", hp_hour_2: "寅时（03:00-04:59）", hp_hour_3: "卯时（05:00-06:59）", hp_hour_4: "辰时（07:00-08:59）", hp_hour_5: "巳时（09:00-10:59）", hp_hour_6: "午时（11:00-12:59）", hp_hour_7: "未时（13:00-14:59）", hp_hour_8: "申时（15:00-16:59）", hp_hour_9: "酉时（17:00-18:59）", hp_hour_10: "戌时（19:00-20:59）", hp_hour_11: "亥时（21:00-22:59）",
+        peo_custom_feat: "自定义档案 · {dm} 日主",
+        peo_custom_del: "删除",
         hp_btn: "开始合盘分析",
         hp_initial: "填写数据后点击分析",
         hp_ref_title: "十神参照表（以己土日主为例）",
@@ -1356,6 +1429,28 @@
         hp_hour_l: "Hour Pillar", hp_hour_ph: "e.g. Ding Mao",
         hp_wx_l: "Other Party Day Master Element",
         hp_wx_wood: "Wood (Jia / Yi)", hp_wx_fire: "Fire (Bing / Ding)", hp_wx_earth: "Earth (Wu / Ji)", hp_wx_metal: "Metal (Geng / Xin)", hp_wx_water: "Water (Ren / Gui)",
+        hp_new_title: "Add Person · Auto Calculate",
+        hp_new_desc: "Enter birth date (Solar or Lunar) and hour; four pillars auto-calculated. Fill into the synastry below or add to People Overview",
+        hp_new_name: "Name / Title",
+        hp_new_name_ph: "e.g. Zhang San / Cousin",
+        hp_new_rel: "Relation / Note",
+        hp_new_rel_ph: "e.g. Classmate / Project partner",
+        hp_new_cal: "Calendar",
+        hp_new_solar: "Solar",
+        hp_new_lunar: "Lunar",
+        hp_new_leap: "Leap month",
+        hp_new_hour: "Hour",
+        hp_new_year: "Year", hp_new_month: "Month", hp_new_day: "Day",
+        hp_new_calc: "Calculate Pillars",
+        hp_new_fill: "Fill into Synastry",
+        hp_new_add: "Add to People Overview",
+        hp_new_solar_date: "Solar: ", hp_new_lunar_date: "Lunar: ", hp_new_four: "Pillars: ", hp_new_dm: "Day Master: ",
+        hp_alert_name: "Please enter a name / title first",
+        hp_alert_date: "Invalid birth date (supported: 1900-2100)",
+        hp_new_added: "Added to People Overview",
+        hp_hour_0: "Zi (23:00-00:59)", hp_hour_1: "Chou (01:00-02:59)", hp_hour_2: "Yin (03:00-04:59)", hp_hour_3: "Mao (05:00-06:59)", hp_hour_4: "Chen (07:00-08:59)", hp_hour_5: "Si (09:00-10:59)", hp_hour_6: "Wu (11:00-12:59)", hp_hour_7: "Wei (13:00-14:59)", hp_hour_8: "Shen (15:00-16:59)", hp_hour_9: "You (17:00-18:59)", hp_hour_10: "Xu (19:00-20:59)", hp_hour_11: "Hai (21:00-22:59)",
+        peo_custom_feat: "Custom profile · {dm} Day Master",
+        peo_custom_del: "Delete",
         hp_btn: "Run Synastry Analysis",
         hp_initial: "Fill data then click analysis",
         hp_ref_title: "10 Gods Reference (For Ji Earth Day Master)",
@@ -1486,6 +1581,9 @@
       if (ln.dataset.done === '1') calculateLiunian();
       const hp = document.getElementById('hepan-result');
       if (hp.dataset.done === '1') calculateHepan();
+      const hpn = document.getElementById('hp-new-result');
+      if (hpn.dataset.done === '1' && document.getElementById('hp-new-name').value.trim()) calcNewPerson();
+      if (typeof renderCustomPeople === 'function') renderCustomPeople();
     }
 
     function toggleLang() {
@@ -1607,7 +1705,218 @@
       `;
     }
 
+    // ===================== 农历 / 公历转换与四柱推算 =====================
+    // 数据来源：1900-2100 农历信息表 + 节气表（Jea杨 lunar-calendar，公开天文数据）
+    const LUNAR = {
+      lunarInfo: [0x04bd8,0x04ae0,0x0a570,0x054d5,0x0d260,0x0d950,0x16554,0x056a0,0x09ad0,0x055d2,0x04ae0,0x0a5b6,0x0a4d0,0x0d250,0x1d255,0x0b540,0x0d6a0,0x0ada2,0x095b0,0x14977,0x04970,0x0a4b0,0x0b4b5,0x06a50,0x06d40,0x1ab54,0x02b60,0x09570,0x052f2,0x04970,0x06566,0x0d4a0,0x0ea50,0x16a95,0x05ad0,0x02b60,0x186e3,0x092e0,0x1c8d7,0x0c950,0x0d4a0,0x1d8a6,0x0b550,0x056a0,0x1a5b4,0x025d0,0x092d0,0x0d2b2,0x0a950,0x0b557,0x06ca0,0x0b550,0x15355,0x04da0,0x0a5b0,0x14573,0x052b0,0x0a9a8,0x0e950,0x06aa0,0x0aea6,0x0ab50,0x04b60,0x0aae4,0x0a570,0x05260,0x0f263,0x0d950,0x05b57,0x056a0,0x096d0,0x04dd5,0x04ad0,0x0a4d0,0x0d4d4,0x0d250,0x0d558,0x0b540,0x0b6a0,0x195a6,0x095b0,0x049b0,0x0a974,0x0a4b0,0x0b27a,0x06a50,0x06d40,0x0af46,0x0ab60,0x09570,0x04af5,0x04970,0x064b0,0x074a3,0x0ea50,0x06b58,0x05ac0,0x0ab60,0x096d5,0x092e0,0x0c960,0x0d954,0x0d4a0,0x0da50,0x07552,0x056a0,0x0abb7,0x025d0,0x092d0,0x0cab5,0x0a950,0x0b4a0,0x0baa4,0x0ad50,0x055d9,0x04ba0,0x0a5b0,0x15176,0x052b0,0x0a930,0x07954,0x06aa0,0x0ad50,0x05b52,0x04b60,0x0a6e6,0x0a4e0,0x0d260,0x0ea65,0x0d530,0x05aa0,0x076a3,0x096d0,0x04afb,0x04ad0,0x0a4d0,0x1d0b6,0x0d250,0x0d520,0x0dd45,0x0b5a0,0x056d0,0x055b2,0x049b0,0x0a577,0x0a4b0,0x0aa50,0x1b255,0x06d20,0x0ada0,0x14b63,0x09370,0x049f8,0x04970,0x064b0,0x168a6,0x0ea50,0x06b20,0x1a6c4,0x0aae0,0x092e0,0x0d2e3,0x0c960,0x0d557,0x0d4a0,0x0da50,0x05d55,0x056a0,0x0a6d0,0x055d4,0x052d0,0x0a9b8,0x0a950,0x0b4a0,0x0b6a6,0x0ad50,0x055a0,0x0aba4,0x0a5b0,0x052b0,0x0b273,0x06930,0x07337,0x06aa0,0x0ad50,0x14b55,0x04b60,0x0a570,0x054e4,0x0d160,0x0e968,0x0d520,0x0daa0,0x16aa6,0x056d0,0x04ae0,0x0a9d4,0x0a2d0,0x0d150,0x0f252,0x0d520],
+      sTermInfo: ['9778397bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf97c3598082c95f8c965cc920f','97bd0b06bdb0722c965ce1cfcc920f','b027097bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf97c359801ec95f8c965cc920f','97bd0b06bdb0722c965ce1cfcc920f','b027097bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf97c359801ec95f8c965cc920f','97bd0b06bdb0722c965ce1cfcc920f','b027097bd097c36b0b6fc9274c91aa','9778397bd19801ec9210c965cc920e','97b6b97bd19801ec95f8c965cc920f','97bd09801d98082c95f8e1cfcc920f','97bd097bd097c36b0b6fc9210c8dc2','9778397bd197c36c9210c9274c91aa','97b6b97bd19801ec95f8c965cc920e','97bd09801d98082c95f8e1cfcc920f','97bd097bd097c36b0b6fc9210c8dc2','9778397bd097c36c9210c9274c91aa','97b6b97bd19801ec95f8c965cc920e','97bcf97c3598082c95f8e1cfcc920f','97bd097bd097c36b0b6fc9210c8dc2','9778397bd097c36c9210c9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf97c3598082c95f8c965cc920f','97bd097bd097c35b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf97c3598082c95f8c965cc920f','97bd097bd097c35b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf97c359801ec95f8c965cc920f','97bd097bd097c35b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf97c359801ec95f8c965cc920f','97bd097bd097c35b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf97c359801ec95f8c965cc920f','97bd097bd07f595b0b6fc920fb0722','9778397bd097c36b0b6fc9210c8dc2','9778397bd19801ec9210c9274c920e','97b6b97bd19801ec95f8c965cc920f','97bd07f5307f595b0b0bc920fb0722','7f0e397bd097c36b0b6fc9210c8dc2','9778397bd097c36c9210c9274c920e','97b6b97bd19801ec95f8c965cc920f','97bd07f5307f595b0b0bc920fb0722','7f0e397bd097c36b0b6fc9210c8dc2','9778397bd097c36c9210c9274c91aa','97b6b97bd19801ec9210c965cc920e','97bd07f1487f595b0b0bc920fb0722','7f0e397bd097c36b0b6fc9210c8dc2','9778397bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf7f1487f595b0b0bb0b6fb0722','7f0e397bd097c35b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf7f1487f595b0b0bb0b6fb0722','7f0e397bd097c35b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf7f1487f531b0b0bb0b6fb0722','7f0e397bd097c35b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c965cc920e','97bcf7f1487f531b0b0bb0b6fb0722','7f0e397bd07f595b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b97bd19801ec9210c9274c920e','97bcf7f0e47f531b0b0bb0b6fb0722','7f0e397bd07f595b0b0bc920fb0722','9778397bd097c36b0b6fc9210c91aa','97b6b97bd197c36c9210c9274c920e','97bcf7f0e47f531b0b0bb0b6fb0722','7f0e397bd07f595b0b0bc920fb0722','9778397bd097c36b0b6fc9210c8dc2','9778397bd097c36c9210c9274c920e','97b6b7f0e47f531b0723b0b6fb0722','7f0e37f5307f595b0b0bc920fb0722','7f0e397bd097c36b0b6fc9210c8dc2','9778397bd097c36b0b70c9274c91aa','97b6b7f0e47f531b0723b0b6fb0721','7f0e37f1487f595b0b0bb0b6fb0722','7f0e397bd097c35b0b6fc9210c8dc2','9778397bd097c36b0b6fc9274c91aa','97b6b7f0e47f531b0723b0b6fb0721','7f0e27f1487f595b0b0bb0b6fb0722','7f0e397bd097c35b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b7f0e47f531b0723b0b6fb0721','7f0e27f1487f531b0b0bb0b6fb0722','7f0e397bd097c35b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b7f0e47f531b0723b0b6fb0721','7f0e27f1487f531b0b0bb0b6fb0722','7f0e397bd097c35b0b6fc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b7f0e47f531b0723b0b6fb0721','7f0e27f1487f531b0b0bb0b6fb0722','7f0e397bd07f595b0b0bc920fb0722','9778397bd097c36b0b6fc9274c91aa','97b6b7f0e47f531b0723b0787b0721','7f0e27f0e47f531b0b0bb0b6fb0722','7f0e397bd07f595b0b0bc920fb0722','9778397bd097c36b0b6fc9210c91aa','97b6b7f0e47f149b0723b0787b0721','7f0e27f0e47f531b0723b0b6fb0722','7f0e397bd07f595b0b0bc920fb0722','9778397bd097c36b0b6fc9210c8dc2','977837f0e37f149b0723b0787b0721','7f07e7f0e47f531b0723b0b6fb0722','7f0e37f5307f595b0b0bc920fb0722','7f0e397bd097c35b0b6fc9210c8dc2','977837f0e37f14998082b0787b0721','7f07e7f0e47f531b0723b0b6fb0721','7f0e37f1487f595b0b0bb0b6fb0722','7f0e397bd097c35b0b6fc9210c8dc2','977837f0e37f14998082b0787b06bd','7f07e7f0e47f531b0723b0b6fb0721','7f0e27f1487f531b0b0bb0b6fb0722','7f0e397bd097c35b0b6fc920fb0722','977837f0e37f14998082b0787b06bd','7f07e7f0e47f531b0723b0b6fb0721','7f0e27f1487f531b0b0bb0b6fb0722','7f0e397bd097c35b0b6fc920fb0722','977837f0e37f14998082b0787b06bd','7f07e7f0e47f531b0723b0b6fb0721','7f0e27f1487f531b0b0bb0b6fb0722','7f0e397bd07f595b0b0bc920fb0722','977837f0e37f14998082b0787b06bd','7f07e7f0e47f531b0723b0b6fb0721','7f0e27f1487f531b0b0bb0b6fb0722','7f0e397bd07f595b0b0bc920fb0722','977837f0e37f14998082b0787b06bd','7f07e7f0e47f149b0723b0787b0721','7f0e27f0e47f531b0b0bb0b6fb0722','7f0e397bd07f595b0b0bc920fb0722','977837f0e37f14998082b0723b06bd','7f07e7f0e37f149b0723b0787b0721','7f0e27f0e47f531b0723b0b6fb0722','7f0e397bd07f595b0b0bc920fb0722','977837f0e37f14898082b0723b02d5','7ec967f0e37f14998082b0787b0721','7f07e7f0e47f531b0723b0b6fb0722','7f0e37f1487f595b0b0bb0b6fb0722','7f0e37f0e37f14898082b0723b02d5','7ec967f0e37f14998082b0787b0721','7f07e7f0e47f531b0723b0b6fb0722','7f0e37f1487f531b0b0bb0b6fb0722','7f0e37f0e37f14898082b0723b02d5','7ec967f0e37f14998082b0787b06bd','7f07e7f0e47f531b0723b0b6fb0721','7f0e37f1487f531b0b0bb0b6fb0722','7f0e37f0e37f14898082b072297c35','7ec967f0e37f14998082b0787b06bd','7f07e7f0e47f531b0723b0b6fb0721','7f0e27f1487f531b0b0bb0b6fb0722','7f0e37f0e37f14898082b072297c35','7ec967f0e37f14998082b0787b06bd','7f07e7f0e47f531b0723b0b6fb0721','7f0e27f1487f531b0b0bb0b6fb0722','7f0e37f0e366aa89801eb072297c35','7ec967f0e37f14998082b0787b06bd','7f07e7f0e47f149b0723b0787b0721','7f0e27f1487f531b0b0bb0b6fb0722','7f0e37f0e366aa89801eb072297c35','7ec967f0e37f14998082b0723b06bd','7f07e7f0e47f149b0723b0787b0721','7f0e27f0e47f531b0723b0b6fb0722','7f0e37f0e366aa89801eb072297c35','7ec967f0e37f14998082b0723b06bd','7f07e7f0e37f14998083b0787b0721','7f0e27f0e47f531b0723b0b6fb0722','7f0e37f0e366aa89801eb072297c35','7ec967f0e37f14898082b0723b02d5','7f07e7f0e37f14998082b0787b0721','7f07e7f0e47f531b0723b0b6fb0722','7f0e36665b66aa89801e9808297c35','665f67f0e37f14898082b0723b02d5','7ec967f0e37f14998082b0787b0721','7f07e7f0e47f531b0723b0b6fb0722','7f0e36665b66a449801e9808297c35','665f67f0e37f14898082b0723b02d5','7ec967f0e37f14998082b0787b06bd','7f07e7f0e47f531b0723b0b6fb0721','7f0e36665b66a449801e9808297c35','665f67f0e37f14898082b072297c35','7ec967f0e37f14998082b0787b06bd','7f07e7f0e47f531b0723b0b6fb0721','7f0e26665b66a449801e9808297c35','665f67f0e37f1489801eb072297c35','7ec967f0e37f14998082b0787b06bd','7f07e7f0e47f531b0723b0b6fb0721','7f0e27f1487f531b0b0bb0b6fb0722'],
+      solarMonth: [31,28,31,30,31,30,31,31,30,31,30,31],
+      Gan: ['甲','乙','丙','丁','戊','己','庚','辛','壬','癸'],
+      Zhi: ['子','丑','寅','卯','辰','巳','午','未','申','酉','戌','亥'],
+      nStr1: ['日','一','二','三','四','五','六','七','八','九','十'],
+      nStr2: ['初','十','廿','卅'],
+      nStr3: ['正','二','三','四','五','六','七','八','九','十','冬','腊'],
+      lYearDays(y) { let i, sum = 348; for (i = 0x8000; i > 0x8; i >>= 1) { sum += (this.lunarInfo[y - 1900] & i) ? 1 : 0; } return sum + this.leapDays(y); },
+      leapMonth(y) { return this.lunarInfo[y - 1900] & 0xf; },
+      leapDays(y) { if (this.leapMonth(y)) return (this.lunarInfo[y - 1900] & 0x10000) ? 30 : 29; return 0; },
+      monthDays(y, m) { if (m > 12 || m < 1) return -1; return (this.lunarInfo[y - 1900] & (0x10000 >> m)) ? 30 : 29; },
+      solarDays(y, m) { if (m > 12 || m < 1) return -1; if (m === 2) return ((y % 4 === 0 && y % 100 !== 0) || (y % 400 === 0)) ? 29 : 28; return this.solarMonth[m - 1]; },
+      toGanZhiYear(lYear) { const g = (lYear - 3) % 10, z = (lYear - 3) % 12; return this.Gan[(g === 0 ? 10 : g) - 1] + this.Zhi[(z === 0 ? 12 : z) - 1]; },
+      toGanZhi(offset) { return this.Gan[((offset % 10) + 10) % 10] + this.Zhi[((offset % 12) + 12) % 12]; },
+      getTerm(y, n) {
+        if (y < 1900 || y > 2100 || n < 1 || n > 24) return -1;
+        const t = this.sTermInfo[y - 1900];
+        const info = [parseInt('0x' + t.substr(0, 5), 16).toString(), parseInt('0x' + t.substr(5, 5), 16).toString(), parseInt('0x' + t.substr(10, 5), 16).toString(), parseInt('0x' + t.substr(15, 5), 16).toString(), parseInt('0x' + t.substr(20, 5), 16).toString(), parseInt('0x' + t.substr(25, 5), 16).toString()];
+        const calday = [info[0].substr(0, 1), info[0].substr(1, 2), info[0].substr(3, 1), info[0].substr(4, 2), info[1].substr(0, 1), info[1].substr(1, 2), info[1].substr(3, 1), info[1].substr(4, 2), info[2].substr(0, 1), info[2].substr(1, 2), info[2].substr(3, 1), info[2].substr(4, 2), info[3].substr(0, 1), info[3].substr(1, 2), info[3].substr(3, 1), info[3].substr(4, 2), info[4].substr(0, 1), info[4].substr(1, 2), info[4].substr(3, 1), info[4].substr(4, 2), info[5].substr(0, 1), info[5].substr(1, 2), info[5].substr(3, 1), info[5].substr(4, 2)];
+        return parseInt(calday[n - 1]);
+      },
+      toChinaMonth(m) { if (m > 12 || m < 1) return -1; return this.nStr3[m - 1] + '月'; },
+      toChinaDay(d) { let s; if (d === 10) s = '初十'; else if (d === 20) s = '二十'; else if (d === 30) s = '三十'; else s = this.nStr2[Math.floor(d / 10)] + this.nStr1[d % 10]; return s; },
+      solar2lunar(y, m, d) {
+        if (y < 1900 || y > 2100) return -1;
+        if (y === 1900 && m === 1 && d < 31) return -1;
+        const objDate = new Date(y, m - 1, d);
+        const yy = objDate.getFullYear(), mm = objDate.getMonth() + 1, dd = objDate.getDate();
+        let offset = (Date.UTC(yy, mm - 1, dd) - Date.UTC(1900, 0, 31)) / 86400000;
+        let i, temp = 0;
+        for (i = 1900; i < 2101 && offset > 0; i++) { temp = this.lYearDays(i); offset -= temp; }
+        if (offset < 0) { offset += temp; i--; }
+        const year = i;
+        let leap = this.leapMonth(i);
+        let isLeap = false;
+        for (i = 1; i < 13 && offset > 0; i++) {
+          if (leap > 0 && i === (leap + 1) && !isLeap) { --i; isLeap = true; temp = this.leapDays(year); }
+          else { temp = this.monthDays(year, i); }
+          if (isLeap && i === (leap + 1)) isLeap = false;
+          offset -= temp;
+        }
+        if (offset === 0 && leap > 0 && i === leap + 1) { if (isLeap) { isLeap = false; } else { isLeap = true; --i; } }
+        if (offset < 0) { offset += temp; --i; }
+        const month = i;
+        const day = offset + 1;
+        return { lYear: year, lMonth: month, lDay: day, isLeap: isLeap, cYear: yy, cMonth: mm, cDay: dd, gzMonth: this.getMonthPillar(yy, mm, dd), gzDay: this.toGanZhi(this.getDayOffset(yy, mm, dd)) };
+      },
+      getMonthPillar(y, m, d) {
+        let gzM = this.toGanZhi((y - 1900) * 12 + m + 11);
+        const firstNode = this.getTerm(y, m * 2 - 1);
+        if (d >= firstNode) gzM = this.toGanZhi((y - 1900) * 12 + m + 12);
+        return gzM;
+      },
+      getDayOffset(y, m, d) { return Date.UTC(y, m - 1, 1) / 86400000 + 25567 + 10 + d - 1; },
+      lunar2solar(y, m, d, isLeapMonth) {
+        isLeapMonth = !!isLeapMonth;
+        const leapMonth = this.leapMonth(y);
+        if (isLeapMonth && leapMonth !== m) return -1;
+        if (y === 2100 && m === 12 && d > 1 || y === 1900 && m === 1 && d < 31) return -1;
+        const day = this.monthDays(y, m);
+        let _day = day;
+        if (isLeapMonth) _day = this.leapDays(y);
+        if (y < 1900 || y > 2100 || d > _day) return -1;
+        let offset = 0;
+        for (let i = 1900; i < y; i++) offset += this.lYearDays(i);
+        let leap = 0, isAdd = false;
+        for (let i = 1; i < m; i++) {
+          leap = this.leapMonth(y);
+          if (!isAdd) { if (leap <= i && leap > 0) { offset += this.leapDays(y); isAdd = true; } }
+          offset += this.monthDays(y, i);
+        }
+        if (isLeapMonth) offset += day;
+        const calObj = new Date((offset + d - 31) * 86400000 + Date.UTC(1900, 1, 30, 0, 0, 0));
+        return this.solar2lunar(calObj.getUTCFullYear(), calObj.getUTCMonth() + 1, calObj.getUTCDate());
+      }
+    };
+
     // ===================== 合盘计算（双语） =====================
+    // 拼音/汉字反查映射与日主五行
+    const GAN_PY = {}; for (const k in GAN_ZH) GAN_PY[GAN_ZH[k]] = k;
+    const ZHI_PY = {}; for (const k in ZHI_ZH) ZHI_PY[ZHI_ZH[k]] = k;
+    const GAN_WX = {Jia:'wood',Yi:'wood',Bing:'fire',Ding:'fire',Wu:'earth',Ji:'earth',Geng:'metal',Xin:'metal',Ren:'water',Gui:'water'};
+
+    // 由公历日期 + 时辰索引推算四柱（年柱立春分界、月柱节气分界、时柱五鼠遁）
+    function computeFourPillars(cY, cM, cD, hzIdx) {
+      const lichun = LUNAR.getTerm(cY, 3);
+      let yStr;
+      if (cM < 2 || (cM === 2 && cD < lichun)) yStr = LUNAR.toGanZhiYear(cY - 1);
+      else yStr = LUNAR.toGanZhiYear(cY);
+      const mStr = LUNAR.getMonthPillar(cY, cM, cD);
+      const dStr = LUNAR.toGanZhi(LUNAR.getDayOffset(cY, cM, cD));
+      const dg = GAN_PY[dStr[0]];
+      const ganStart = {Jia:0,Yi:2,Bing:4,Ding:6,Wu:8,Ji:0,Geng:2,Xin:4,Ren:6,Gui:8}[dg];
+      const hStr = LUNAR.Gan[(ganStart + hzIdx) % 10] + LUNAR.Zhi[hzIdx];
+      return {
+        pillars: {
+          y: { g: GAN_PY[yStr[0]], z: ZHI_PY[yStr[1]] },
+          m: { g: GAN_PY[mStr[0]], z: ZHI_PY[mStr[1]] },
+          d: { g: GAN_PY[dStr[0]], z: ZHI_PY[dStr[1]] },
+          h: { g: GAN_PY[hStr[0]], z: ZHI_PY[hStr[1]] }
+        },
+        dm: GAN_PY[dStr[0]],
+        dmWuxing: GAN_WX[GAN_PY[dStr[0]]]
+      };
+    }
+
+    let lastNewPerson = null;
+
+    function escHtml(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    function toggleNewCal() {
+      const cal = document.getElementById('hp-new-cal').value;
+      const wrap = document.getElementById('hp-new-leap-wrap');
+      wrap.classList.toggle('hidden', cal !== 'lunar');
+      wrap.classList.toggle('flex', cal === 'lunar');
+    }
+
+    function calcNewPerson() {
+      const name = document.getElementById('hp-new-name').value.trim();
+      const rel = document.getElementById('hp-new-rel').value.trim();
+      const cal = document.getElementById('hp-new-cal').value;
+      const year = parseInt(document.getElementById('hp-new-year').value);
+      const month = parseInt(document.getElementById('hp-new-month').value);
+      const day = parseInt(document.getElementById('hp-new-day').value);
+      const hzIdx = parseInt(document.getElementById('hp-new-hour').value);
+      if (!name) { alert(t('hp_alert_name')); return; }
+      let lu, fp;
+      if (cal === 'solar') {
+        if (!(year >= 1900 && year <= 2100) || !(month >= 1 && month <= 12) || !(day >= 1 && day <= LUNAR.solarDays(year, month))) { alert(t('hp_alert_date')); return; }
+        lu = LUNAR.solar2lunar(year, month, day);
+        if (lu === -1) { alert(t('hp_alert_date')); return; }
+        fp = computeFourPillars(year, month, day, hzIdx);
+        lastNewPerson = { name: name, rel: rel, cY: year, cM: month, cD: day, hzIdx: hzIdx, lunar: lu, fp: fp };
+      } else {
+        const isLeap = document.getElementById('hp-new-leap').checked;
+        lu = LUNAR.lunar2solar(year, month, day, isLeap);
+        if (lu === -1) { alert(t('hp_alert_date')); return; }
+        fp = computeFourPillars(lu.cYear, lu.cMonth, lu.cDay, hzIdx);
+        lastNewPerson = { name: name, rel: rel, cY: lu.cYear, cM: lu.cMonth, cD: lu.cDay, hzIdx: hzIdx, lunar: lu, fp: fp };
+      }
+      const box = document.getElementById('hp-new-result');
+      const p = lastNewPerson;
+      const gzH = x => gzDisplay(x.g, x.z);
+      const lunarStr = p.lunar.lYear + ' ' + t('hp_new_lunar') + ' ' + p.lunar.lMonth + (p.lunar.isLeap ? t('hp_new_leap') : '') + '月' + p.lunar.lDay + '日';
+      const dmShow = currentLang === 'zh' ? GAN_ZH[p.fp.dm] : p.fp.dm;
+      box.classList.remove('hidden');
+      box.dataset.done = '1';
+      box.innerHTML =
+        '<div class="font-semibold mb-1">' + escHtml(p.name) + (p.rel ? ' · ' + escHtml(p.rel) : '') + '</div>' +
+        '<div class="text-slate-500 mb-1">' + t('hp_new_solar_date') + ' ' + p.cY + '-' + String(p.cM).padStart(2, '0') + '-' + String(p.cD).padStart(2, '0') + ' &nbsp;|&nbsp; ' + t('hp_new_lunar_date') + ' ' + lunarStr + '</div>' +
+        '<div>' + t('hp_new_four') + ' ' + [gzH(p.fp.pillars.y), gzH(p.fp.pillars.m), gzH(p.fp.pillars.d), gzH(p.fp.pillars.h)].join('  ') + '</div>' +
+        '<div>' + t('hp_new_dm') + ' ' + dmShow + '</div>';
+    }
+
+    function fillHepanFromNew() {
+      if (!lastNewPerson) calcNewPerson();
+      const p = lastNewPerson;
+      if (!p) return;
+      const gzH = x => gzDisplay(x.g, x.z);
+      document.getElementById('hp-year').value = gzH(p.fp.pillars.y);
+      document.getElementById('hp-month').value = gzH(p.fp.pillars.m);
+      document.getElementById('hp-day').value = gzH(p.fp.pillars.d);
+      document.getElementById('hp-hour').value = gzH(p.fp.pillars.h);
+      document.getElementById('hp-wuxing').value = p.fp.dmWuxing;
+    }
+
+    function addPersonToOverview() {
+      if (!lastNewPerson) calcNewPerson();
+      const p = lastNewPerson;
+      if (!p) return;
+      let list = [];
+      try { list = JSON.parse(localStorage.getItem('bazi_custom_people') || '[]'); } catch (e) { list = []; }
+      list.push({ name: p.name, rel: p.rel, cY: p.cY, cM: p.cM, cD: p.cD, hzIdx: p.hzIdx, dm: p.fp.dm, wuxing: p.fp.dmWuxing, ts: Date.now() });
+      localStorage.setItem('bazi_custom_people', JSON.stringify(list));
+      renderCustomPeople();
+      alert(t('hp_new_added'));
+    }
+
+    function delCustomPerson(idx) {
+      let list = [];
+      try { list = JSON.parse(localStorage.getItem('bazi_custom_people') || '[]'); } catch (e) { list = []; }
+      if (idx >= 0 && idx < list.length) list.splice(idx, 1);
+      localStorage.setItem('bazi_custom_people', JSON.stringify(list));
+      renderCustomPeople();
+    }
+
+    function renderCustomPeople() {
+      const tb = document.getElementById('peopleBody');
+      if (!tb) return;
+      let list = [];
+      try { list = JSON.parse(localStorage.getItem('bazi_custom_people') || '[]'); } catch (e) { list = []; }
+      tb.innerHTML = list.map((p, i) => {
+        const fp = computeFourPillars(p.cY, p.cM, p.cD, p.hzIdx);
+        const gzH = x => gzDisplay(x.g, x.z);
+        const dmShow = currentLang === 'zh' ? GAN_ZH[p.dm] : p.dm;
+        const feat = t('peo_custom_feat').replace('{dm}', dmShow);
+        return '<tr>' +
+          '<td class="p-2 font-medium text-indigo-700">' + escHtml(p.name) + '</td>' +
+          '<td class="p-2">' + escHtml(p.rel || '—') + '</td>' +
+          '<td class="p-2">' + [gzH(fp.pillars.y), gzH(fp.pillars.m), gzH(fp.pillars.d), gzH(fp.pillars.h)].join(' ') + '</td>' +
+          '<td class="p-2">' + dmShow + '</td>' +
+          '<td class="p-2">' + feat + ' <button onclick="delCustomPerson(' + i + ')" class="ml-2 text-xs text-red-500 hover:text-red-700" title="' + t('peo_custom_del') + '">✕</button></td>' +
+          '</tr>';
+      }).join('');
+    }
+
     function calculateHepan() {
       const year = document.getElementById('hp-year').value.trim();
       const month = document.getElementById('hp-month').value.trim();
