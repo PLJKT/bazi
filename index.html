@@ -92,6 +92,7 @@
         <nav class="w-56 shrink-0">
             <div class="card p-2 sticky top-6">
                 <div class="nav-item active px-4 py-3 rounded cursor-pointer mb-1" data-panel="overview" data-i18n="nav_overview">核心总览</div>
+                <div class="nav-item px-4 py-3 rounded cursor-pointer mb-1" data-panel="people" data-i18n="nav_people">人物总览</div>
                 <div class="nav-item px-4 py-3 rounded cursor-pointer mb-1" data-panel="self" data-i18n="nav_self">个人命理中心</div>
                 <div class="nav-item px-4 py-3 rounded cursor-pointer mb-1" data-panel="family" data-i18n="nav_family">家庭生态</div>
                 <div class="nav-item px-4 py-3 rounded cursor-pointer mb-1" data-panel="career" data-i18n="nav_career">事业与人脉</div>
@@ -147,6 +148,88 @@
                             <li data-i18n="ov_strat_2">长辈指方向，伙伴供资源</li>
                             <li data-i18n="ov_strat_3">女性合伙人是未来增长的关键资本来源</li>
                         </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Master People Overview -->
+            <div id="people" class="panel">
+                <div class="card p-6">
+                    <h2 class="text-lg font-bold mb-4 text-slate-800" data-i18n="peo_title">人物基础信息总览</h2>
+                    <p class="text-xs text-slate-400 mb-3" data-i18n="peo_note">家庭核心 + 事业人脉全部基础档案；八字口径以校准记录为准</p>
+                    <div class="overflow-x-auto">
+                    <table class="w-full text-sm" style="table-layout:fixed">
+                        <colgroup>
+                            <col style="width:18%"><col style="width:22%"><col style="width:24%"><col style="width:12%"><col style="width:24%">
+                        </colgroup>
+                        <thead class="bg-slate-50">
+                            <tr>
+                                <th class="text-left p-2" data-i18n="peo_h_person">人物</th>
+                                <th class="text-left p-2" data-i18n="peo_h_role">身份 / 关系</th>
+                                <th class="text-left p-2" data-i18n="peo_h_bazi">八字</th>
+                                <th class="text-left p-2" data-i18n="peo_h_dm">日主</th>
+                                <th class="text-left p-2" data-i18n="peo_h_feat">格局与角色定位</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y">
+                            <tr>
+                                <td class="p-2 font-medium text-slate-800" data-i18n="peo_me">本人</td>
+                                <td class="p-2" data-i18n="peo_me_role">系统用户 · 战略操盘手</td>
+                                <td class="p-2" data-i18n="peo_me_gz">癸亥、辛酉、己酉、乙亥</td>
+                                <td class="p-2" data-i18n="peo_me_dm">己土</td>
+                                <td class="p-2" data-i18n="peo_me_feat">食神生财，稳控全局；喜火土，忌水金过旺</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium text-slate-800" data-i18n="peo_wife">妻子</td>
+                                <td class="p-2" data-i18n="peo_wife_role">中文教师 · 持家主内</td>
+                                <td class="p-2" data-i18n="peo_wife_gz">癸亥、甲寅、壬申、庚戌</td>
+                                <td class="p-2" data-i18n="peo_wife_dm">壬水</td>
+                                <td class="p-2" data-i18n="peo_wife_feat">偏印夺食，外柔内刚；守成稳定，财务不敏感</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium text-slate-800" data-i18n="peo_son">儿子</td>
+                                <td class="p-2" data-i18n="peo_son_role">8-9 岁 · 聪慧好动</td>
+                                <td class="p-2" data-i18n="peo_son_gz">丁酉、壬子、庚寅、癸未</td>
+                                <td class="p-2" data-i18n="peo_son_dm">庚金</td>
+                                <td class="p-2" data-i18n="peo_son_feat">金水伤官，聪慧刚强；冬金喜火土</td>
+                            </tr>
+                            <tr class="bg-slate-50">
+                                <td class="p-2 font-medium text-red-800" data-i18n="peo_p1">#1 长辈（导师 / 义父）</td>
+                                <td class="p-2" data-i18n="peo_p1_role">精神指引 · 人生稳压器</td>
+                                <td class="p-2" data-i18n="peo_p1_gz">己丑、戊辰、丙戌、庚寅</td>
+                                <td class="p-2" data-i18n="peo_p1_dm">丙火</td>
+                                <td class="p-2" data-i18n="peo_p1_feat">寅午戌三合火局生你；纯粹指引，无金钱牵扯</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium text-blue-800" data-i18n="peo_p2">#2 老板 / 集团董事</td>
+                                <td class="p-2" data-i18n="peo_p2_role">核心事业平台</td>
+                                <td class="p-2" data-i18n="peo_p2_gz">庚子、甲申、庚辰、壬午</td>
+                                <td class="p-2" data-i18n="peo_p2_dm">庚金</td>
+                                <td class="p-2" data-i18n="peo_p2_feat">伤官生财；交易型平台，重大利益用结构锁定</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium text-green-800" data-i18n="peo_p3">#3 小老板（次要前合伙人）</td>
+                                <td class="p-2" data-i18n="peo_p3_role">10% 小股东 · 项目负责人</td>
+                                <td class="p-2" data-i18n="peo_p3_gz">辛亥、庚寅、癸未、丁巳</td>
+                                <td class="p-2" data-i18n="peo_p3_dm">癸水</td>
+                                <td class="p-2" data-i18n="peo_p3_feat">枭印偏财；工具化高危，顾问化参与、书面留痕</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium text-amber-800" data-i18n="peo_p4">#4 贵人导师</td>
+                                <td class="p-2" data-i18n="peo_p4_role">22 年交情 · 长期靠山</td>
+                                <td class="p-2" data-i18n="peo_p4_gz">庚子、壬午、乙亥、戊寅</td>
+                                <td class="p-2" data-i18n="peo_p4_dm">乙木</td>
+                                <td class="p-2" data-i18n="peo_p4_feat">官印相生；关键方向指引，感恩 + 边界，不拉入财务</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2 font-medium text-rose-800" data-i18n="peo_p5">女性资本合伙人</td>
+                                <td class="p-2" data-i18n="peo_p5_role">教培项目 51% · 资本方</td>
+                                <td class="p-2" data-i18n="peo_p5_gz">壬戌、丁未、癸巳、戊午</td>
+                                <td class="p-2" data-i18n="peo_p5_dm">癸水</td>
+                                <td class="p-2" data-i18n="peo_p5_feat">财星极旺；2026 午火生土，条款窗口期</td>
+                            </tr>
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>
@@ -795,7 +878,55 @@
         lock_error: "用户名或密码错误",
         header_version: "最终校准版 · 2026.10 · 本地加密使用",
         nav_overview: "核心总览",
+        nav_people: "人物总览",
         nav_self: "个人命理中心",
+        peo_title: "人物基础信息总览",
+        peo_note: "家庭核心 + 事业人脉全部基础档案；八字口径以校准记录为准",
+        peo_h_person: "人物",
+        peo_h_role: "身份 / 关系",
+        peo_h_bazi: "八字",
+        peo_h_dm: "日主",
+        peo_h_feat: "格局与角色定位",
+        peo_me: "本人",
+        peo_me_role: "系统用户 · 战略操盘手",
+        peo_me_gz: "癸亥、辛酉、己酉、乙亥",
+        peo_me_dm: "己土",
+        peo_me_feat: "食神生财，稳控全局；喜火土，忌水金过旺",
+        peo_wife: "妻子",
+        peo_wife_role: "中文教师 · 持家主内",
+        peo_wife_gz: "癸亥、甲寅、壬申、庚戌",
+        peo_wife_dm: "壬水",
+        peo_wife_feat: "偏印夺食，外柔内刚；守成稳定，财务不敏感",
+        peo_son: "儿子",
+        peo_son_role: "8-9 岁 · 聪慧好动",
+        peo_son_gz: "丁酉、壬子、庚寅、癸未",
+        peo_son_dm: "庚金",
+        peo_son_feat: "金水伤官，聪慧刚强；冬金喜火土",
+        peo_p1: "#1 长辈（导师 / 义父）",
+        peo_p1_role: "精神指引 · 人生稳压器",
+        peo_p1_gz: "己丑、戊辰、丙戌、庚寅",
+        peo_p1_dm: "丙火",
+        peo_p1_feat: "寅午戌三合火局生你；纯粹指引，无金钱牵扯",
+        peo_p2: "#2 老板 / 集团董事",
+        peo_p2_role: "核心事业平台",
+        peo_p2_gz: "庚子、甲申、庚辰、壬午",
+        peo_p2_dm: "庚金",
+        peo_p2_feat: "伤官生财；交易型平台，重大利益用结构锁定",
+        peo_p3: "#3 小老板（次要前合伙人）",
+        peo_p3_role: "10% 小股东 · 项目负责人",
+        peo_p3_gz: "辛亥、庚寅、癸未、丁巳",
+        peo_p3_dm: "癸水",
+        peo_p3_feat: "枭印偏财；工具化高危，顾问化参与、书面留痕",
+        peo_p4: "#4 贵人导师",
+        peo_p4_role: "22 年交情 · 长期靠山",
+        peo_p4_gz: "庚子、壬午、乙亥、戊寅",
+        peo_p4_dm: "乙木",
+        peo_p4_feat: "官印相生；关键方向指引，感恩 + 边界，不拉入财务",
+        peo_p5: "女性资本合伙人",
+        peo_p5_role: "教培项目 51% · 资本方",
+        peo_p5_gz: "壬戌、丁未、癸巳、戊午",
+        peo_p5_dm: "癸水",
+        peo_p5_feat: "财星极旺；2026 午火生土，条款窗口期",
         nav_family: "家庭生态",
         nav_career: "事业与人脉",
         nav_future: "未来决策指南",
@@ -1045,7 +1176,55 @@
         lock_error: "Wrong username or password",
         header_version: "Final Calibrated Version · 2026.10 · Encrypted Local Only",
         nav_overview: "Core Overview",
+        nav_people: "People Overview",
         nav_self: "Personal BaZi Center",
+        peo_title: "Master People Overview",
+        peo_note: "Full base profiles: family core + career network; BaZi follows the calibration log",
+        peo_h_person: "Person",
+        peo_h_role: "Role / Relation",
+        peo_h_bazi: "BaZi",
+        peo_h_dm: "Day Master",
+        peo_h_feat: "Pattern & Positioning",
+        peo_me: "You",
+        peo_me_role: "System user · Strategic orchestrator",
+        peo_me_gz: "Gui Hai, Xin You, Ji You, Yi Hai",
+        peo_me_dm: "Ji Earth",
+        peo_me_feat: "Eating God wealth, stable leadership; favors Fire-Earth, avoid excess Water-Metal",
+        peo_wife: "Wife",
+        peo_wife_role: "Chinese teacher · home anchor",
+        peo_wife_gz: "Gui Hai, Jia Yin, Ren Shen, Geng Xu",
+        peo_wife_dm: "Ren Water",
+        peo_wife_feat: "Indirect Resource seizes Eating God, gentle outside strong inside; conservative, money-insensitive",
+        peo_son: "Son",
+        peo_son_role: "8-9 yrs · bright & active",
+        peo_son_gz: "Ding You, Ren Zi, Geng Yin, Gui Wei",
+        peo_son_dm: "Geng Metal",
+        peo_son_feat: "Metal-Water Hurting Officer, bright & strong-willed; winter Metal favors Fire-Earth",
+        peo_p1: "#1 Elder (mentor / godfather)",
+        peo_p1_role: "Spiritual guidance · life stabilizer",
+        peo_p1_gz: "Ji Chou, Wu Chen, Bing Xu, Geng Yin",
+        peo_p1_dm: "Bing Fire",
+        peo_p1_feat: "Yin-Wu-Xu Fire combo feeds you; pure guidance, no money involved",
+        peo_p2: "#2 Boss / Group director",
+        peo_p2_role: "Core career platform",
+        peo_p2_gz: "Geng Zi, Jia Shen, Geng Chen, Ren Wu",
+        peo_p2_dm: "Geng Metal",
+        peo_p2_feat: "Hurting Officer generates wealth; transactional platform, lock major interests structurally",
+        peo_p3: "#3 Small boss (former junior partner)",
+        peo_p3_role: "10% shareholder · project lead",
+        peo_p3_gz: "Xin Hai, Geng Yin, Gui Wei, Ding Si",
+        peo_p3_dm: "Gui Water",
+        peo_p3_feat: "Indirect Resource & Indirect Wealth; high tool-using risk, stay advisory with written trail",
+        peo_p4: "#4 Mentor ally",
+        peo_p4_role: "22-yr bond · long-term support",
+        peo_p4_gz: "Geng Zi, Ren Wu, Yi Hai, Wu Yin",
+        peo_p4_dm: "Yi Wood",
+        peo_p4_feat: "Officer-Resource combo; key direction guidance, gratitude + boundaries, keep out of finance",
+        peo_p5: "Female capital partner",
+        peo_p5_role: "Edu project 51% · capital side",
+        peo_p5_gz: "Ren Xu, Ding Wei, Gui Si, Wu Wu",
+        peo_p5_dm: "Gui Water",
+        peo_p5_feat: "Extreme Wealth star; 2026 Wu Fire feeds Earth, term-lock window",
         nav_family: "Family Ecosystem",
         nav_career: "Career & Network",
         nav_future: "Future Decision Guide",
